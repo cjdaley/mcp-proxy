@@ -22,16 +22,26 @@ COPY . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --no-editable
 
-RUN apk add --update --no-cache catatonit
+RUN apk add --update --no-cache catatonit git nodejs npm
 
 # Final stage with explicit platform specification
 FROM python:3.13-alpine
+
+RUN apk add --update --no-cache git nodejs npm
 
 COPY --from=uv --chown=app:app /app/.venv /app/.venv
 COPY --from=uv /usr/bin/catatonit /usr/bin/
 COPY --from=uv /usr/libexec/podman/catatonit /usr/libexec/podman/
 
+# Clone and setup Gravity MCP
+RUN git clone https://github.com/cjdaley/Gravity_MCP.git /gravity-mcp && \
+    cd /gravity-mcp && \
+    npm install
+
+# Copy servers configuration
+COPY servers.json /app/servers.json
+
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
 
-ENTRYPOINT ["catatonit", "--", "mcp-proxy"]
+ENTRYPOINT ["catatonit", "--", "mcp-proxy", "--config", "/app/servers.json"]
