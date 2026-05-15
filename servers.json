@@ -12,10 +12,8 @@
     "ga4": {
       "enabled": true,
       "timeout": 30,
-      "command": "node",
-      "args": [
-        "/ga4-mcp/src/index.js"
-      ],
+      "command": "python",
+      "args": ["-m", "analytics_mcp.server"],
       "transportType": "stdio"
     }
   }
