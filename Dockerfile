@@ -46,4 +46,4 @@ COPY servers.json /app/servers.json
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
 
-ENTRYPOINT ["catatonit", "--", "mcp-proxy", "--named-server-config", "/app/servers.json", "--pass-environment"]
+ENTRYPOINT ["catatonit", "--", "mcp-proxy", "--named-server-config", "/app/servers.json", "--pass-environment", "--port", "8080", "--host", "0.0.0.0"]
