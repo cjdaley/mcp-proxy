@@ -12,7 +12,7 @@
     "ga4": {
       "enabled": true,
       "timeout": 30,
-      "command": "python",
+      "command": "/app/.venv/bin/python",
       "args": ["-m", "analytics_mcp.server"],
       "transportType": "stdio"
     }
