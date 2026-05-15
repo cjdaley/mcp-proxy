@@ -6,3 +6,5 @@
 !pyproject.toml
 !uv.lock
 !LICENSE
+!Dockerfile
+!servers.json
