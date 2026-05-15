@@ -1,4 +1,3 @@
-cat > servers.json << 'EOF'
 {
   "mcpServers": {
     "gravity": {
@@ -17,4 +16,3 @@ cat > servers.json << 'EOF'
     }
   }
 }
-EOF
