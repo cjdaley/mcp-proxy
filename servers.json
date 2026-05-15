@@ -7,12 +7,7 @@
       "args": [
         "/gravity-mcp/src/index.js"
       ],
-      "transportType": "stdio",
-      "env": {
-        "GRAVITY_FORMS_CONSUMER_KEY": "${GRAVITY_FORMS_CONSUMER_KEY}",
-        "GRAVITY_FORMS_CONSUMER_SECRET": "${GRAVITY_FORMS_CONSUMER_SECRET}",
-        "GRAVITY_FORMS_BASE_URL": "${GRAVITY_FORMS_BASE_URL}"
-      }
+      "transportType": "stdio"
     }
   }
 }
