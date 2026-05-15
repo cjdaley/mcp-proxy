@@ -8,6 +8,15 @@
         "/gravity-mcp/src/index.js"
       ],
       "transportType": "stdio"
+    },
+    "ga4": {
+      "enabled": true,
+      "timeout": 30,
+      "command": "node",
+      "args": [
+        "/ga4-mcp/src/index.js"
+      ],
+      "transportType": "stdio"
     }
   }
 }
