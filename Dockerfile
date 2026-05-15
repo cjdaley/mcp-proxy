@@ -37,6 +37,11 @@ RUN git clone https://github.com/cjdaley/Gravity_MCP.git /gravity-mcp && \
     cd /gravity-mcp && \
     npm install
 
+# Clone and setup GA4 MCP
+RUN git clone https://github.com/cjdaley/google-analytics-mcp.git /ga4-mcp && \
+    cd /ga4-mcp && \
+    npm install
+
 # Copy servers configuration
 COPY servers.json /app/servers.json
 
