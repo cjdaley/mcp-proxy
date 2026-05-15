@@ -23,6 +23,9 @@ RUN uv sync --frozen --no-dev --no-editable
 
 RUN apk add --update --no-cache catatonit git nodejs npm
 
+# Install GA4 MCP as Python package
+RUN uv pip install git+https://github.com/cjdaley/google-analytics-mcp.git
+
 # Final stage with explicit platform specification
 FROM python:3.13-alpine
 
@@ -35,11 +38,6 @@ COPY --from=uv /usr/libexec/podman/catatonit /usr/libexec/podman/
 # Clone and setup Gravity MCP
 RUN git clone https://github.com/cjdaley/Gravity_MCP.git /gravity-mcp && \
     cd /gravity-mcp && \
-    npm install
-
-# Clone and setup GA4 MCP
-RUN git clone https://github.com/cjdaley/google-analytics-mcp.git /ga4-mcp && \
-    cd /ga4-mcp && \
     npm install
 
 # Copy servers configuration
