@@ -43,15 +43,16 @@ RUN git clone https://github.com/cjdaley/Gravity_MCP.git /gravity-mcp && \
 # Copy servers configuration
 COPY servers.json /app/servers.json
 
+# Place executables in the environment at the front of the path
+ENV PATH="/app/.venv/bin:$PATH"
+
 # Create startup script that handles Google credentials
 RUN echo '#!/bin/sh\n\
 if [ ! -z "$GOOGLE_APPLICATION_CREDENTIALS" ] && [ ! -f "$GOOGLE_APPLICATION_CREDENTIALS" ]; then\n\
   echo "$GOOGLE_APPLICATION_CREDENTIALS" > /app/service-account.json\n\
+  chmod 600 /app/service-account.json\n\
   export GOOGLE_APPLICATION_CREDENTIALS=/app/service-account.json\n\
 fi\n\
 exec catatonit -- mcp-proxy --named-server-config /app/servers.json --pass-environment --port 8080 --host 0.0.0.0' > /entrypoint.sh && chmod +x /entrypoint.sh
-
-# Place executables in the environment at the front of the path
-ENV PATH="/app/.venv/bin:$PATH"
 
 ENTRYPOINT ["/entrypoint.sh"]
