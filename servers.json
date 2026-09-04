@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "gravity": {
-      "enabled": true,
+      "enabled": false,
       "timeout": 30,
       "command": "node",
       "args": [
