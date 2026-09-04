@@ -16,6 +16,9 @@ from mcp.server.streamable_http_manager import StreamableHTTPSessionManager
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+import os
+import secrets
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 from starlette.routing import BaseRoute, Mount, Route
@@ -24,6 +27,18 @@ from starlette.types import Receive, Scope, Send
 from .proxy_server import create_proxy_server
 
 logger = logging.getLogger(__name__)
+
+class BearerTokenMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app, token: str):
+        super().__init__(app)
+        self.token = token
+
+    async def dispatch(self, request, call_next):
+        auth = request.headers.get("authorization", "")
+        provided = auth[7:].strip() if auth.lower().startswith("bearer ") else ""
+        if not provided or not secrets.compare_digest(provided, self.token):
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        return await call_next(request)
 
 DEFAULT_EXPOSE_HEADERS: Final[tuple[str, ...]] = ("mcp-session-id",)
 
@@ -228,6 +243,10 @@ async def run_mcp_server(
                 ),
             )
 
+        mcp_token = os.environ.get("GA4_MCP_TOKEN")
+        if not mcp_token:
+            raise RuntimeError("GA4_MCP_TOKEN environment variable is required")
+        middleware.insert(0, Middleware(BearerTokenMiddleware, token=mcp_token))
         starlette_app = Starlette(
             debug=(mcp_settings.log_level == "DEBUG"),
             routes=all_routes,
